@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Тронь хобот!</title>
+    <style>
+        body { background: #e0f7fa; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+        #elephant { font-size: 150px; cursor: pointer; transition: transform 0.1s; }
+        #elephant:active { transform: scale(1.1); }
+        .message { font-size: 24px; color: #006064; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Потрогай слоника!</h1>
+    <div id="elephant">🐘</div>
+    <div class="message" id="msg">Жми на хобот!</div>
+
+    <script>
+        const elephant = document.getElementById('elephant');
+        const msg = document.getElementById('msg');
+        let count = 0;
+
+        elephant.addEventListener('click', () => {
+            count++;
+            msg.innerText = `Ты потрогал хобот ${count} раз!`;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(200 + (count * 10), ctx.currentTime);
+            osc.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+            
+            if(count % 5 === 0) alert('Слоник доволен! 🎺');
+        });
+    </script>
+</body>
+</html>
