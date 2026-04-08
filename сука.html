@@ -2,28 +2,46 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ebalvrot Engine | Shitpost Edition</title>
+    <title>Poop Jump Simulator</title>
     <style>
-        body { background: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { border: 2px solid #00ff41; padding: 40px; box-shadow: 0 0 25px rgba(0, 255, 65, 0.3); border-radius: 10px; max-width: 600px; text-align: center; }
-        h1 { text-shadow: 0 0 10px #00ff41; text-transform: uppercase; }
-        .shit-post { border-top: 1px dashed #00ff41; margin-top: 20px; padding-top: 20px; font-style: italic; color: #008f11; }
-        blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        body { background: #111; color: #0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: monospace; overflow: hidden; }
+        #game { width: 600px; height: 200px; border-bottom: 2px solid #0f0; position: relative; overflow: hidden; }
+        #poop { position: absolute; bottom: 0; left: 50px; font-size: 30px; transition: bottom 0.1s; }
+        .fence { position: absolute; bottom: 0; right: -50px; font-size: 30px; }
+        .jump { animation: jump 0.5s ease-out; }
+        @keyframes jump { 0% { bottom: 0; } 50% { bottom: 100px; } 100% { bottom: 0; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>СИСТЕМА ЕБАЛВРОТ-ЭНДЖИН: <blink>ONLINE</blink></h1>
-        <p>> Соединение установлено...</p>
-        <p>> Режим деплоя: ДИВАННЫЙ</p>
-        <p>> Создатель: AhVasalam1337</p>
-        
-        <div class="shit-post">
-            <p>> [SYSTEM_LOG]: Обнаружена аномалия в каловых массах...</p>
-            <p>> Какашка — это не просто отходы, это метафизический артефакт, свидетельствующий о бренности бытия и качестве съеденной шаурмы у вокзала.</p>
-            <p>> Смирись, юзер: всё превращается в какашки, даже твой код.</p>
-        </div>
-    </div>
+    <h1>POOP JUMP SIMULATOR</h1>
+    <div id="game"><div id="poop">💩</div></div>
+    <p>Нажми пробел, чтобы прыгнуть</p>
+    <script>
+        const poop = document.getElementById('poop');
+        const game = document.getElementById('game');
+        let jumping = false;
+        function jump() {
+            if (jumping) return;
+            jumping = true;
+            poop.classList.add('jump');
+            setTimeout(() => { poop.classList.remove('jump'); jumping = false; }, 500);
+        }
+        document.addEventListener('keydown', (e) => { if (e.code === 'Space') jump(); });
+        function spawnFence() {
+            const fence = document.createElement('div');
+            fence.className = 'fence';
+            fence.innerText = '|';
+            fence.style.right = '-50px';
+            game.appendChild(fence);
+            let pos = -50;
+            const move = setInterval(() => {
+                pos += 5;
+                fence.style.right = pos + 'px';
+                if (pos > 550 && pos < 600 && !jumping) { alert('GAME OVER'); location.reload(); }
+                if (pos > 600) { fence.remove(); clearInterval(move); }
+            }, 20);
+        }
+        setInterval(spawnFence, 2000);
+    </script>
 </body>
 </html>
